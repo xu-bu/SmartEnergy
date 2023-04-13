@@ -1,0 +1,1 @@
+In the Main Contract, I use interface IP2P use expose member functions of P2P contract. Compared to instantiating a P2P contract object and invoke its function directively, this fashion guarantees which functions are external and improves safety.
