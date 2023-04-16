@@ -1,1 +1,6 @@
+Incentive Mechanism:
+For every trader, he/she can earn cashback from transaction. The rate is a parameter of contract, which now I defaultly set it as 100. It means if this trader sells/buys 100 Wei, he/she can earn 1 Wei as cashback. To encourage people don't keep energy locally, I assgin double cashback for seller.
+
+Tips:
 In the Main Contract, I use interface IP2P use expose member functions of P2P contract. Compared to instantiating a P2P contract object and invoke its function directively, this fashion guarantees which functions are external and improves safety.
+

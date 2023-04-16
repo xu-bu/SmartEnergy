@@ -70,7 +70,7 @@ contract P2P{
     function sell(int energy,address userAddress) public {
         uint256 seller=address2Index[userAddress];
         require(Prosumers[seller].energyStatus>0 && Prosumers[seller].energyStatus>energy,"You don't have enough energy on your account, cannot sell!");
-        incentive(userAddress, uint256(energy*rate/cashbackNum));
+        incentive(userAddress, 2*uint256(energy*rate/cashbackNum));
         for (uint256 i=0; i<buyers.length; ++i)
         {   
             uint256 index=address2Index[buyers[i]];
