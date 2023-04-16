@@ -1,0 +1,1 @@
+Two simple contracts for people to trade energy via ETH. Using interface to interact between contracts.
