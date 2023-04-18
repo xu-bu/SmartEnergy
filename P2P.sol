@@ -69,8 +69,7 @@ contract P2P{
 
     function sell(int energy,address userAddress) public {
         uint256 seller=address2Index[userAddress];
-        require(Prosumers[seller].energyStatus>0 && Prosumers[seller].energyStatus>energy,"You don't have enough energy on your account, cannot sell!");
-        incentive(userAddress, 2*uint256(energy*rate/cashbackNum));
+        incentive(userAddress, uint256(energy*rate/cashbackNum));
         for (uint256 i=0; i<buyers.length; ++i)
         {   
             uint256 index=address2Index[buyers[i]];
@@ -86,8 +85,7 @@ contract P2P{
             // if this buyer can fulfill our request
                 Prosumers[seller].balance+=uint256(energy*rate);
                 Prosumers[index].balance-=uint256(energy*rate);
-                Prosumers[index].energyStatus-=energy;
-                Prosumers[seller].energyStatus=0;
+                Prosumers[index].energyStatus+=energy;
                 energy=0;
                 break;
             }
@@ -110,7 +108,6 @@ contract P2P{
         uint256 buyer=address2Index[userAddress];
         require(Prosumers[buyer].balance>=uint256(rate*energy),"You don't have enough money on your account, cannot sell!");
         incentive(userAddress, uint256(energy*rate/cashbackNum));
-        Prosumers[buyer].energyStatus-=energy;
         for (uint256 i=0; i<sellers.length; ++i)
         {   
             uint256 index=address2Index[buyers[i]];
@@ -126,8 +123,7 @@ contract P2P{
             // if this buyer can fulfill our request
                 Prosumers[buyer].balance-=uint256(energy*rate);
                 Prosumers[index].balance+=uint256(energy*rate);
-                Prosumers[index].energyStatus+=energy;
-                Prosumers[buyer].energyStatus=0;
+                Prosumers[index].energyStatus-=energy;
                 energy=0;
                 break;
             }
@@ -159,6 +155,8 @@ contract P2P{
     function test() public {
         Prosumers[0].energyStatus=2;
         Prosumers[1].energyStatus=3;
-        Prosumers[2].balance=10;
+        sell(2, 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4);
+        sell(3, 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2);
+        Prosumers[2].balance=100000;
     }
 }

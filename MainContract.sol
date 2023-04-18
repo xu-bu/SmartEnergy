@@ -21,17 +21,11 @@ contract MainContract{
     address public owner;
     address P2PcontractAddress;
 
-    // // the first person to deploy the contract is
-    // // the owner
-    // constructor() public {
-    //     owner = msg.sender;
-    // }
-
     function getP2P(address P2Paddress) public {
         P2PcontractAddress=P2Paddress;
     }
 
-    function register() public {
+    function register() public forbidDuplicateRegistering{
         IP2P(P2PcontractAddress).addProsumer(msg.sender);
     }
 
@@ -43,7 +37,7 @@ contract MainContract{
         return IP2P(P2PcontractAddress).checkBalance(msg.sender);
     }
 
-    function energyRequestHandler(int energy) public onlyRegistered enoughEnergy(energy) {
+    function energyRequest(int energy) public payable  onlyRegistered enoughMoney(energy) {
         if(energy>0){
             IP2P(P2PcontractAddress).sell(energy,msg.sender);
         }else if (energy<0){
@@ -60,18 +54,10 @@ contract MainContract{
     }
 
     function testRegister() public {
-        register();
-        register();
-        register();
+        IP2P(P2PcontractAddress).addProsumer(0x5B38Da6a701c568545dCfcB03FcB875f56beddC4);
+        IP2P(P2PcontractAddress).addProsumer(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2);
+        IP2P(P2PcontractAddress).addProsumer(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db);
     }
-
-
-    // //modifier: https://medium.com/coinmonks/solidity-tutorial-all-about-modifiers-a86cf81c14cb
-    // modifier onlyOwner() {
-    //     //is the message sender owner of the contract?
-    //     require(msg.sender == owner);
-    //     _;
-    // }
 
     modifier onlyRegistered(){
         require(IP2P(P2PcontractAddress).checkIfRegistered(msg.sender),"You are not registered yet!");
@@ -83,9 +69,9 @@ contract MainContract{
         _;
     }
 
-    modifier enoughEnergy(int energy){
-        if (energy>0){
-            require(checkBalance()>uint256(energy*IP2P(P2PcontractAddress).getRate()),"You don't have enough balance to buy energy!");
+    modifier enoughMoney(int energy){
+        if (energy<0){
+            require(checkBalance()>uint256(-energy*IP2P(P2PcontractAddress).getRate()),"You don't have enough balance to buy energy!");
         }
         _;
     }
